@@ -14,8 +14,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 export default function BugsPage() {
+  const { t } = useLanguage();
   const [bugs, setBugs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -79,15 +81,15 @@ export default function BugsPage() {
   return (
     <div className="space-y-6 animate-[fade-in_0.3s_ease-out]">
       <PageHeader
-        title="Bug Reports"
-        description="View, filter, and track all reported gameplay and technical bugs."
+        title={t('bugs.title')}
+        description={t('bugs.description')}
       >
         <button
           onClick={() => setIsReportOpen(true)}
           className="flex items-center gap-2 px-4 h-10 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm"
         >
           <Plus className="w-4 h-4" />
-          Report Bug
+          {t('bugs.reportBug')}
         </button>
       </PageHeader>
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Search, X, Filter } from "lucide-react";
 import { BugStatus, BugSeverity, BugPriority } from "@/types";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 interface Project {
   id: string;
@@ -26,6 +27,7 @@ export function BugTableToolbar({
   onProjectChange,
   onReset,
 }: BugTableToolbarProps) {
+  const { t } = useLanguage();
   const [projects, setProjects] = useState<Project[]>([]);
   const [searchVal, setSearchVal] = useState("");
   const [statusVal, setStatusVal] = useState("");
@@ -66,7 +68,7 @@ export function BugTableToolbar({
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <input
           type="text"
-          placeholder="Filter by title or code..."
+          placeholder={t('bugs.filters.search')}
           value={searchVal}
           onChange={(e) => {
             setSearchVal(e.target.value);
@@ -87,7 +89,7 @@ export function BugTableToolbar({
           }}
           className="h-9 px-3 rounded-lg bg-secondary/50 border border-border text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
         >
-          <option value="">All Projects</option>
+          <option value="">{t('bugs.filters.allProjects')}</option>
           {projects.map((p) => (
             <option key={p.id} value={p.id}>
               {p.name}
@@ -104,7 +106,7 @@ export function BugTableToolbar({
           }}
           className="h-9 px-3 rounded-lg bg-secondary/50 border border-border text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
         >
-          <option value="">All Statuses</option>
+          <option value="">{t('bugs.filters.allStatuses')}</option>
           {Object.values(BugStatus).map((s) => (
             <option key={s} value={s}>
               {s}
@@ -121,7 +123,7 @@ export function BugTableToolbar({
           }}
           className="h-9 px-3 rounded-lg bg-secondary/50 border border-border text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
         >
-          <option value="">All Severities</option>
+          <option value="">{t('bugs.filters.allSeverities')}</option>
           {Object.values(BugSeverity).map((sev) => (
             <option key={sev} value={sev}>
               {sev}
@@ -138,7 +140,7 @@ export function BugTableToolbar({
           }}
           className="h-9 px-3 rounded-lg bg-secondary/50 border border-border text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
         >
-          <option value="">All Priorities</option>
+          <option value="">{t('bugs.filters.allPriorities')}</option>
           {Object.values(BugPriority).map((p) => (
             <option key={p} value={p}>
               {p}

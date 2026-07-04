@@ -16,6 +16,70 @@
     "title": "Dashboard",
     "description": "Overview of game QA statistics, active bug reports, and project health.",
     "loadingError": "Failed to load dashboard statistics.",
-    "tryRefreshing": "Please try refreshing the page."
+    "tryRefreshing": "Please try refreshing the page.",
+    "stats": {
+      "totalBugs": "TOTAL BUGS",
+      "openBugs": "OPEN BUGS",
+      "criticalBugs": "CRITICAL BUGS",
+      "fixedToday": "FIXED TODAY"
+    },
+    "charts": {
+      "bugStatusDistribution": "BUG STATUS DISTRIBUTION",
+      "severityBreakdown": "SEVERITY BREAKDOWN",
+      "recentActivity": "RECENT ACTIVITY"
+    }
+  },
+  "bugs": {
+    "title": "Bug Reports",
+    "description": "View, filter, and track all reported gameplay and technical bugs.",
+    "reportBug": "Report Bug",
+    "filters": {
+      "search": "Filter by title or code...",
+      "allProjects": "All Projects",
+      "allStatuses": "All Statuses",
+      "allSeverities": "All Severities",
+      "allPriorities": "All Priorities"
+    },
+    "table": {
+      "code": "CODE",
+      "title": "TITLE",
+      "project": "PROJECT",
+      "severity": "SEVERITY",
+      "priority": "PRIORITY",
+      "status": "STATUS",
+      "assignee": "ASSIGNEE",
+      "date": "DATE"
+    }
+  },
+  "projects": {
+    "title": "Projects",
+    "description": "Manage gaming projects, track builds release versions, and aggregate bug metrics.",
+    "createProject": "Create Project"
+  },
+  "users": {
+    "title": "Team Directory",
+    "description": "Manage QA Testers, Game Developers, Producers, and Admins roles and directory access permissions.",
+    "table": {
+      "member": "MEMBER",
+      "email": "EMAIL ADDRESS",
+      "role": "SYSTEM ROLE",
+      "assigned": "BUGS ASSIGNED",
+      "reported": "BUGS REPORTED",
+      "joined": "JOINED DATE"
+    }
+  },
+  "reports": {
+    "title": "QA Analytics & Reports",
+    "description": "Comprehensive analysis of bug lifespans, team velocity, platform distribution, and project scopes.",
+    "velocity": "AVG RESOLUTION VELOCITY",
+    "activeScope": "TOP PROJECT ACTIVE SCOPE",
+    "totalProjects": "TOTAL ACTIVE PROJECTS",
+    "volumeTrends": "BUG VOLUME TRENDS (LAST 7 DAYS)",
+    "platformDistribution": "PLATFORM DISTRIBUTION",
+    "bugsPerProject": "BUGS PER PROJECT",
+    "topContributors": "TOP QA CONTRIBUTORS & FIXERS",
+    "topReporters": "TOP BUG REPORTERS",
+    "hours": "Hours",
+    "projects": "Projects"
   }
 }

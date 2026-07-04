@@ -3,16 +3,19 @@ import { UserAvatar } from "@/components/common/UserAvatar";
 import { getRelativeTime } from "@/lib/utils";
 import type { RecentActivity as RecentActivityType } from "@/types";
 import Link from "next/link";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 interface RecentActivityProps {
   activities: RecentActivityType[];
 }
 
 export function RecentActivity({ activities }: RecentActivityProps) {
+  const { t } = useLanguage();
+
   return (
     <Card className="glass border-border/50 col-span-3">
       <CardHeader>
-        <CardTitle className="text-sm font-semibold uppercase tracking-wider">Recent Activity</CardTitle>
+        <CardTitle className="text-sm font-semibold uppercase tracking-wider">{t('dashboard.charts.recentActivity')}</CardTitle>
       </CardHeader>
       <CardContent className="px-6">
         {activities.length === 0 ? (

@@ -19,6 +19,7 @@ import {
 } from "recharts";
 import { UserAvatar } from "@/components/common/UserAvatar";
 import { PlatformLabels } from "@/types";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 interface ReportData {
   avgResolutionTimeHours: number;
@@ -42,6 +43,7 @@ const PLATFORM_COLORS = [
 ];
 
 export default function ReportsPage() {
+  const { t } = useLanguage();
   const [data, setData] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -90,8 +92,8 @@ export default function ReportsPage() {
   return (
     <div className="space-y-6 animate-[fade-in_0.3s_ease-out]">
       <PageHeader
-        title="QA Analytics & Reports"
-        description="Comprehensive analysis of bug lifespans, team velocity, platform distribution, and project scopes."
+        title={t('reports.title')}
+        description={t('reports.description')}
       />
 
       {/* Stats Overview */}
@@ -102,8 +104,8 @@ export default function ReportsPage() {
               <Clock className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Avg Resolution Velocity</p>
-              <p className="text-2xl font-bold mt-0.5">{data.avgResolutionTimeHours} Hours</p>
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{t('reports.velocity')}</p>
+              <p className="text-2xl font-bold mt-0.5">{data.avgResolutionTimeHours} {t('reports.hours')}</p>
             </div>
           </CardContent>
         </Card>
@@ -114,7 +116,7 @@ export default function ReportsPage() {
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Top Project Active Scope</p>
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{t('reports.activeScope')}</p>
               <p className="text-2xl font-bold mt-0.5">
                 {data.bugsPerProject.length > 0
                   ? data.bugsPerProject.reduce((max, p) => (p.count > max.count ? p : max), data.bugsPerProject[0]).name
@@ -130,8 +132,8 @@ export default function ReportsPage() {
               <TrendingUp className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Total Active Projects</p>
-              <p className="text-2xl font-bold mt-0.5">{data.bugsPerProject.length} Projects</p>
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{t('reports.totalProjects')}</p>
+              <p className="text-2xl font-bold mt-0.5">{data.bugsPerProject.length} {t('reports.projects')}</p>
             </div>
           </CardContent>
         </Card>
@@ -144,7 +146,7 @@ export default function ReportsPage() {
           <CardHeader>
             <CardTitle className="text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-primary" />
-              Bug Volume Trends (Last 7 Days)
+              {t('reports.volumeTrends')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -184,7 +186,7 @@ export default function ReportsPage() {
           <CardHeader>
             <CardTitle className="text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
               <Monitor className="w-4 h-4 text-primary" />
-              Platform Distribution
+              {t('reports.platformDistribution')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -243,7 +245,7 @@ export default function ReportsPage() {
           <CardHeader>
             <CardTitle className="text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
               <Bug className="w-4 h-4 text-primary" />
-              Bugs per Project
+              {t('reports.bugsPerProject')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -273,13 +275,13 @@ export default function ReportsPage() {
           <CardHeader>
             <CardTitle className="text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
               <Award className="w-4 h-4 text-primary" />
-              Top QA Contributors & Fixers
+              {t('reports.topContributors')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Top Reporters */}
             <div className="space-y-3">
-              <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Top Bug Reporters</h4>
+              <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t('reports.topReporters')}</h4>
               <div className="space-y-2">
                 {data.topReporters.map((reporter) => (
                   <div key={reporter.name} className="flex items-center justify-between text-xs">

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { UserRole, UserRoleLabels } from "@/types";
 import { useSession } from "next-auth/react";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 interface User {
   id: string;
@@ -31,6 +32,7 @@ interface User {
 
 export default function UsersPage() {
   const { data: session } = useSession();
+  const { t } = useLanguage();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -116,8 +118,8 @@ export default function UsersPage() {
   return (
     <div className="space-y-6 animate-[fade-in_0.3s_ease-out]">
       <PageHeader
-        title="Team Directory"
-        description="Manage QA Testers, Game Developers, Producers, and Admins roles and directory access permissions."
+        title={t('users.title')}
+        description={t('users.description')}
       >
         {isAdmin && (
           <button
@@ -140,12 +142,12 @@ export default function UsersPage() {
             <table className="w-full text-sm border-collapse text-left">
               <thead>
                 <tr className="border-b border-border bg-muted/30">
-                  <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Member</th>
-                  <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Email Address</th>
-                  <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">System Role</th>
-                  <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Bugs Assigned</th>
-                  <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Bugs Reported</th>
-                  <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Joined Date</th>
+                  <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('users.table.member')}</th>
+                  <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('users.table.email')}</th>
+                  <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('users.table.role')}</th>
+                  <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('users.table.assigned')}</th>
+                  <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('users.table.reported')}</th>
+                  <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('users.table.joined')}</th>
                   {isAdmin && (
                     <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider text-right">Actions</th>
                   )}

@@ -8,6 +8,7 @@ import { PriorityBadge } from "@/components/common/PriorityBadge";
 import { UserAvatar } from "@/components/common/UserAvatar";
 import { formatDate } from "@/lib/utils";
 import type { BugStatus, BugSeverity, BugPriority } from "@/types";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 interface Bug {
   id: string;
@@ -31,6 +32,8 @@ interface BugTableProps {
 }
 
 export function BugTable({ bugs, onPageChange, page, totalPages, total }: BugTableProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="space-y-4">
       <div className="glass rounded-xl overflow-hidden border border-border/50">
@@ -38,14 +41,14 @@ export function BugTable({ bugs, onPageChange, page, totalPages, total }: BugTab
           <table className="w-full text-sm border-collapse text-left">
             <thead>
               <tr className="border-b border-border bg-muted/30">
-                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Code</th>
-                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Title</th>
-                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Project</th>
-                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Severity</th>
-                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Priority</th>
-                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Status</th>
-                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Assignee</th>
-                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Date</th>
+                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('bugs.table.code')}</th>
+                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('bugs.table.title')}</th>
+                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('bugs.table.project')}</th>
+                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('bugs.table.severity')}</th>
+                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('bugs.table.priority')}</th>
+                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('bugs.table.status')}</th>
+                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('bugs.table.assignee')}</th>
+                <th className="p-4 font-semibold text-muted-foreground uppercase text-xs tracking-wider">{t('bugs.table.date')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">

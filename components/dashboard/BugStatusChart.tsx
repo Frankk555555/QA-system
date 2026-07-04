@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { BugStatusLabels } from "@/types";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 interface BugStatusChartProps {
   data: { status: string; count: number }[];
@@ -22,11 +23,13 @@ const COLORS: Record<string, string> = {
 };
 
 export function BugStatusChart({ data }: BugStatusChartProps) {
+  const { t } = useLanguage();
+
   if (data.length === 0) {
     return (
       <Card className="glass border-border/50 col-span-3">
         <CardHeader>
-          <CardTitle className="text-sm font-semibold uppercase tracking-wider">Bug Status Distribution</CardTitle>
+          <CardTitle className="text-sm font-semibold uppercase tracking-wider">{t('dashboard.charts.bugStatusDistribution')}</CardTitle>
         </CardHeader>
         <CardContent className="h-[300px] flex items-center justify-center text-muted-foreground text-sm">
           No data available
@@ -44,7 +47,7 @@ export function BugStatusChart({ data }: BugStatusChartProps) {
   return (
     <Card className="glass border-border/50 col-span-3">
       <CardHeader>
-        <CardTitle className="text-sm font-semibold uppercase tracking-wider">Bug Status Distribution</CardTitle>
+        <CardTitle className="text-sm font-semibold uppercase tracking-wider">{t('dashboard.charts.bugStatusDistribution')}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-[300px] w-full">

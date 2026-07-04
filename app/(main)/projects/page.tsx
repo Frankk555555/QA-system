@@ -14,6 +14,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 interface Project {
   id: string;
@@ -28,6 +29,7 @@ interface Project {
 
 export default function ProjectsPage() {
   const { data: session } = useSession();
+  const { t } = useLanguage();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -91,8 +93,8 @@ export default function ProjectsPage() {
   return (
     <div className="space-y-6 animate-[fade-in_0.3s_ease-out]">
       <PageHeader
-        title="Projects"
-        description="Manage gaming projects, track builds release versions, and aggregate bug metrics."
+        title={t('projects.title')}
+        description={t('projects.description')}
       >
         {isAdminOrProducer && (
           <button
@@ -100,7 +102,7 @@ export default function ProjectsPage() {
             className="flex items-center gap-2 px-4 h-10 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm"
           >
             <Plus className="w-4 h-4" />
-            Create Project
+            {t('projects.createProject')}
           </button>
         )}
       </PageHeader>

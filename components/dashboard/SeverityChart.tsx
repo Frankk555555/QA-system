@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { BugSeverityLabels } from "@/types";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 interface SeverityChartProps {
   data: { severity: string; count: number }[];
@@ -17,11 +18,13 @@ const COLORS: Record<string, string> = {
 };
 
 export function SeverityChart({ data }: SeverityChartProps) {
+  const { t } = useLanguage();
+
   if (data.length === 0) {
     return (
       <Card className="glass border-border/50 col-span-3">
         <CardHeader>
-          <CardTitle className="text-sm font-semibold uppercase tracking-wider">Severity Breakdown</CardTitle>
+          <CardTitle className="text-sm font-semibold uppercase tracking-wider">{t('dashboard.charts.severityBreakdown')}</CardTitle>
         </CardHeader>
         <CardContent className="h-[300px] flex items-center justify-center text-muted-foreground text-sm">
           No data available
@@ -39,7 +42,7 @@ export function SeverityChart({ data }: SeverityChartProps) {
   return (
     <Card className="glass border-border/50 col-span-3">
       <CardHeader>
-        <CardTitle className="text-sm font-semibold uppercase tracking-wider">Severity Breakdown</CardTitle>
+        <CardTitle className="text-sm font-semibold uppercase tracking-wider">{t('dashboard.charts.severityBreakdown')}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-[300px] w-full">

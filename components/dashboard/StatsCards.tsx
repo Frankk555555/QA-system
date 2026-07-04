@@ -1,36 +1,39 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Bug, AlertTriangle, CheckCircle, FolderKanban, Users } from "lucide-react";
+import { Bug, AlertTriangle, AlertOctagon, CheckCircle2 } from "lucide-react";
 import type { DashboardStats } from "@/types";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 interface StatsCardsProps {
   stats: DashboardStats;
 }
 
 export function StatsCards({ stats }: StatsCardsProps) {
+  const { t } = useLanguage();
+
   const cards = [
     {
-      title: "Total Bugs",
+      title: t('dashboard.stats.totalBugs'),
       value: stats.totalBugs,
       icon: Bug,
-      color: "text-primary bg-primary/10 border-primary/20",
+      color: "text-blue-500 bg-blue-500/10 border-blue-500/20",
     },
     {
-      title: "Open Bugs",
+      title: t('dashboard.stats.openBugs'),
       value: stats.openBugs,
       icon: AlertTriangle,
-      color: "text-medium bg-medium/10 border-medium/20",
+      color: "text-yellow-500 bg-yellow-500/10 border-yellow-500/20",
     },
     {
-      title: "Critical Bugs",
+      title: t('dashboard.stats.criticalBugs'),
       value: stats.criticalBugs,
-      icon: AlertTriangle,
-      color: "text-critical bg-critical/10 border-critical/20 animate-pulse",
+      icon: AlertOctagon,
+      color: "text-red-500 bg-red-500/10 border-red-500/20 animate-pulse",
     },
     {
-      title: "Fixed Today",
+      title: t('dashboard.stats.fixedToday'),
       value: stats.fixedToday,
-      icon: CheckCircle,
-      color: "text-status-fixed bg-status-fixed/10 border-status-fixed/20",
+      icon: CheckCircle2,
+      color: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20",
     },
   ];
 
