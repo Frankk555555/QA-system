@@ -14,30 +14,31 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 const navigation = [
   {
-    name: "Dashboard",
+    key: "dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
   },
   {
-    name: "Bugs",
+    key: "bugs",
     href: "/bugs",
     icon: Bug,
   },
   {
-    name: "Projects",
+    key: "projects",
     href: "/projects",
     icon: FolderKanban,
   },
   {
-    name: "Users",
+    key: "users",
     href: "/users",
     icon: Users,
   },
   {
-    name: "Reports",
+    key: "reports",
     href: "/reports",
     icon: BarChart3,
   },
@@ -46,6 +47,7 @@ const navigation = [
 export function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <aside
@@ -66,7 +68,7 @@ export function Sidebar() {
                 Game <span className="text-primary">QA</span>
               </h1>
               <p className="text-[10px] text-muted-foreground whitespace-nowrap">
-                Management System
+                {t('sidebar.systemName')}
               </p>
             </div>
           )}
@@ -80,7 +82,7 @@ export function Sidebar() {
             pathname === item.href || pathname.startsWith(item.href + "/");
           return (
             <Link
-              key={item.name}
+              key={item.key}
               href={item.href}
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group",
@@ -98,7 +100,7 @@ export function Sidebar() {
                 )}
               />
               {!collapsed && (
-                <span className="whitespace-nowrap">{item.name}</span>
+                <span className="whitespace-nowrap">{t(`sidebar.${item.key}`)}</span>
               )}
               {isActive && !collapsed && (
                 <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
@@ -119,7 +121,7 @@ export function Sidebar() {
           ) : (
             <>
               <ChevronLeft className="w-4 h-4" />
-              <span>Collapse</span>
+              <span>{t('sidebar.collapse')}</span>
             </>
           )}
         </button>

@@ -2,5 +2,20 @@
   "header": {
     "searchPlaceholder": "Search bugs, projects...",
     "signOut": "Sign Out"
+  },
+  "sidebar": {
+    "systemName": "Management System",
+    "dashboard": "Dashboard",
+    "bugs": "Bugs",
+    "projects": "Projects",
+    "users": "Users",
+    "reports": "Reports",
+    "collapse": "Collapse"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "Overview of game QA statistics, active bug reports, and project health.",
+    "loadingError": "Failed to load dashboard statistics.",
+    "tryRefreshing": "Please try refreshing the page."
   }
 }

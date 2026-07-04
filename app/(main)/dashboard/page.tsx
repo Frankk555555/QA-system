@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
 import { PageHeader } from "@/components/common/PageHeader";
 import { StatsCards } from "@/components/dashboard/StatsCards";
 import { BugStatusChart } from "@/components/dashboard/BugStatusChart";
@@ -10,6 +11,7 @@ import { Loader2 } from "lucide-react";
 import type { DashboardStats, BugStatusCount, SeverityCount, RecentActivity as RecentActivityType } from "@/types";
 
 export default function DashboardPage() {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<{
     stats: DashboardStats;
@@ -46,8 +48,8 @@ export default function DashboardPage() {
   if (!data) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-xl font-bold">Failed to load dashboard statistics.</h2>
-        <p className="text-muted-foreground mt-1">Please try refreshing the page.</p>
+        <h2 className="text-xl font-bold">{t('dashboard.loadingError')}</h2>
+        <p className="text-muted-foreground mt-1">{t('dashboard.tryRefreshing')}</p>
       </div>
     );
   }
@@ -55,8 +57,8 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6 animate-[fade-in_0.3s_ease-out]">
       <PageHeader
-        title="Dashboard"
-        description="Overview of game QA statistics, active bug reports, and project health."
+        title={t('dashboard.title')}
+        description={t('dashboard.description')}
       />
 
       <StatsCards stats={data.stats} />
