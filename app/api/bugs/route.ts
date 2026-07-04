@@ -20,7 +20,10 @@ export async function GET(request: NextRequest) {
       sortOrder: (searchParams.get("sortOrder") as "asc" | "desc") || undefined,
     };
 
-    const result = await getBugs(filters);
+    const session = await auth();
+    const user = session?.user ? { id: session.user.id, role: session.user.role as string } : undefined;
+
+    const result = await getBugs(filters, user);
     return NextResponse.json({ success: true, ...result });
   } catch (error) {
     console.error("Get bugs error:", error);

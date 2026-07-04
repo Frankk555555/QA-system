@@ -1,13 +1,20 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { BugStatus, BugSeverity, Platform } from "@prisma/client";
+import { auth } from "@/auth";
+import { getRoleBasedBugFilter } from "@/lib/rbac";
 
 export async function GET() {
   try {
+    const session = await auth();
+    const user = session?.user ? { id: session.user.id, role: session.user.role as string } : undefined;
+    const baseWhere = user ? getRoleBasedBugFilter(user) : {};
+
     // 1. Average resolution time
     // Let's get bugs with status FIXED/VERIFIED/CLOSED and check difference between createdAt and updatedAt
     const resolvedBugs = await prisma.bugReport.findMany({
       where: {
+        ...baseWhere,
         status: { in: [BugStatus.FIXED, BugStatus.VERIFIED, BugStatus.CLOSED] },
       },
       select: {
@@ -30,7 +37,7 @@ export async function GET() {
         id: true,
         name: true,
         _count: {
-          select: { bugs: true },
+          select: { bugs: { where: baseWhere } },
         },
       },
     });
@@ -46,7 +53,7 @@ export async function GET() {
         name: true,
         avatar: true,
         _count: {
-          select: { reportedBugs: true },
+          select: { reportedBugs: { where: baseWhere } },
         },
       },
       orderBy: { reportedBugs: { _count: "desc" } },
@@ -66,7 +73,7 @@ export async function GET() {
         name: true,
         avatar: true,
         _count: {
-          select: { assignedBugs: true },
+          select: { assignedBugs: { where: baseWhere } },
         },
       },
       orderBy: { assignedBugs: { _count: "desc" } },
@@ -81,6 +88,7 @@ export async function GET() {
     // 5. Severity distribution
     const severityGroups = await prisma.bugReport.groupBy({
       by: ["severity"],
+      where: baseWhere,
       _count: { severity: true },
     });
     const severityData = severityGroups.map((g) => ({
@@ -90,7 +98,7 @@ export async function GET() {
 
     // 6. Platform distribution
     const buildsWithBugs = await prisma.bugReport.findMany({
-      where: { buildId: { not: null } },
+      where: { ...baseWhere, buildId: { not: null } },
       select: {
         build: {
           select: { platform: true },
@@ -116,7 +124,7 @@ export async function GET() {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
     const trendBugs = await prisma.bugReport.findMany({
-      where: { createdAt: { gte: sevenDaysAgo } },
+      where: { ...baseWhere, createdAt: { gte: sevenDaysAgo } },
       select: { createdAt: true, status: true },
     });
 

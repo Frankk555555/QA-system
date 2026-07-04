@@ -2,13 +2,22 @@ import { prisma } from "@/lib/prisma";
 import { Prisma, BugStatus } from "@prisma/client";
 import type { BugFilters, PaginatedResponse } from "@/types";
 import { generateBugCode } from "@/lib/utils";
+import { getRoleBasedBugFilter, type RbacUser } from "@/lib/rbac";
 
-export async function getBugs(filters: BugFilters): Promise<PaginatedResponse<Record<string, unknown>>> {
+export async function getBugs(filters: BugFilters, user?: RbacUser): Promise<PaginatedResponse<Record<string, unknown>>> {
   const page = filters.page || 1;
   const pageSize = filters.pageSize || 10;
   const skip = (page - 1) * pageSize;
 
   const where: Prisma.BugReportWhereInput = {};
+  const andClauses: Prisma.BugReportWhereInput[] = [];
+
+  if (user !== undefined) {
+    const rbacFilter = getRoleBasedBugFilter(user);
+    if (Object.keys(rbacFilter).length > 0) {
+      andClauses.push(rbacFilter);
+    }
+  }
 
   if (filters.status) where.status = filters.status as BugStatus;
   if (filters.severity) where.severity = filters.severity as Prisma.EnumBugSeverityFilter;
@@ -16,12 +25,19 @@ export async function getBugs(filters: BugFilters): Promise<PaginatedResponse<Re
   if (filters.projectId) where.projectId = filters.projectId;
   if (filters.assignedToId) where.assignedToId = filters.assignedToId;
   if (filters.reporterId) where.reporterId = filters.reporterId;
+  
   if (filters.search) {
-    where.OR = [
-      { title: { contains: filters.search, mode: "insensitive" } },
-      { bugCode: { contains: filters.search, mode: "insensitive" } },
-      { description: { contains: filters.search, mode: "insensitive" } },
-    ];
+    andClauses.push({
+      OR: [
+        { title: { contains: filters.search, mode: "insensitive" } },
+        { bugCode: { contains: filters.search, mode: "insensitive" } },
+        { description: { contains: filters.search, mode: "insensitive" } },
+      ],
+    });
+  }
+
+  if (andClauses.length > 0) {
+    where.AND = andClauses;
   }
 
   const orderBy: Prisma.BugReportOrderByWithRelationInput = {};

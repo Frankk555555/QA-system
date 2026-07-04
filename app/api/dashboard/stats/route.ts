@@ -5,15 +5,19 @@ import {
   getSeverityDistribution,
   getRecentActivity,
 } from "@/services/dashboard.service";
+import { auth } from "@/auth";
 
 export async function GET() {
   try {
+    const session = await auth();
+    const user = session?.user ? { id: session.user.id, role: session.user.role as string } : undefined;
+
     const [stats, statusDistribution, severityDistribution, recentActivity] =
       await Promise.all([
-        getDashboardStats(),
-        getBugStatusDistribution(),
-        getSeverityDistribution(),
-        getRecentActivity(),
+        getDashboardStats(user),
+        getBugStatusDistribution(user),
+        getSeverityDistribution(user),
+        getRecentActivity(10, user),
       ]);
 
     return NextResponse.json({

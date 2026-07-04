@@ -144,7 +144,8 @@ export default function BugDetailPage({ params }: { params: Promise<{ id: string
     }
   };
 
-  const activityIcon = (action: string) => {
+  const activityIcon = (action?: string) => {
+    if (!action) return <History className="w-3.5 h-3.5 text-muted-foreground" />;
     if (action.includes("Status")) return <Activity className="w-3.5 h-3.5 text-primary" />;
     if (action.includes("Assign")) return <UserCheck className="w-3.5 h-3.5 text-medium" />;
     return <History className="w-3.5 h-3.5 text-muted-foreground" />;
@@ -424,7 +425,7 @@ export default function BugDetailPage({ params }: { params: Promise<{ id: string
                     <div className="space-y-0.5">
                       <p className="text-foreground leading-normal">
                         <span className="font-semibold">{log.user?.name}</span>{" "}
-                        <span className="text-muted-foreground">{log.action.toLowerCase()}</span>
+                        <span className="text-muted-foreground">{log.action?.toLowerCase() || "updated"}</span>
                       </p>
                       {log.oldValue && log.newValue && (
                         <p className="text-[10px] text-muted-foreground">

@@ -156,46 +156,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Demo credentials */}
-          <div className="mt-6 pt-6 border-t border-border">
-            <p className="text-xs text-muted-foreground text-center mb-3">
-              Demo Credentials
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { role: "Admin", email: "admin@gameqa.com" },
-                { role: "QA Tester", email: "qa@gameqa.com" },
-                { role: "Developer", email: "dev@gameqa.com" },
-                { role: "Producer", email: "producer@gameqa.com" },
-              ].map((demo) => (
-                <button
-                  key={demo.role}
-                  type="button"
-                  onClick={() => {
-                    const emailInput = document.getElementById(
-                      "email"
-                    ) as HTMLInputElement;
-                    const passwordInput = document.getElementById(
-                      "password"
-                    ) as HTMLInputElement;
-                    if (emailInput) emailInput.value = demo.email;
-                    if (passwordInput) passwordInput.value = "password123";
-                    // Trigger react-hook-form to recognize the values
-                    const emailEvent = new Event("input", { bubbles: true });
-                    const passwordEvent = new Event("input", { bubbles: true });
-                    emailInput?.dispatchEvent(emailEvent);
-                    passwordInput?.dispatchEvent(passwordEvent);
-                  }}
-                  className="text-xs px-3 py-2 rounded-md bg-secondary/50 border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
-                >
-                  {demo.role}
-                </button>
-              ))}
-            </div>
-            <p className="text-xs text-muted-foreground text-center mt-2">
-              Password: <code className="text-primary/80">password123</code>
-            </p>
-          </div>
+
         </div>
       </div>
     </div>
