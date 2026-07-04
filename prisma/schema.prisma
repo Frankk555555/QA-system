@@ -1,0 +1,262 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// Enums
+// ============================================================================
+
+enum UserRole {
+  ADMIN
+  QA_TESTER
+  DEVELOPER
+  PRODUCER
+  VIEWER
+}
+
+enum ProjectStatus {
+  ACTIVE
+  MAINTENANCE
+  ARCHIVED
+}
+
+enum Platform {
+  WINDOWS
+  STEAM
+  EPIC_GAMES
+  PLAYSTATION
+  XBOX
+  NINTENDO_SWITCH
+  ANDROID
+  IOS
+}
+
+enum BugSeverity {
+  CRITICAL
+  MAJOR
+  MEDIUM
+  MINOR
+  TRIVIAL
+}
+
+enum BugPriority {
+  HIGHEST
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum BugStatus {
+  NEW
+  OPEN
+  ASSIGNED
+  IN_PROGRESS
+  FIXED
+  READY_FOR_TEST
+  VERIFIED
+  CLOSED
+  REJECTED
+  DUPLICATE
+}
+
+// ============================================================================
+// Models
+// ============================================================================
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(VIEWER)
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  reportedBugs  BugReport[]    @relation("BugReporter")
+  assignedBugs  BugReport[]    @relation("BugAssignee")
+  comments      Comment[]
+  activityLogs  ActivityLog[]
+  notifications Notification[]
+  attachments   Attachment[]   @relation("AttachmentUploader")
+
+  @@map("users")
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  name        String
+  description String?       @db.Text
+  status      ProjectStatus @default(ACTIVE)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  builds Builds[]
+  bugs   BugReport[]
+
+  @@map("projects")
+}
+
+model Builds {
+  id          String   @id @default(cuid())
+  projectId   String
+  version     String
+  platform    Platform
+  releaseDate DateTime?
+  createdAt   DateTime @default(now())
+
+  // Relations
+  project Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  bugs    BugReport[]
+
+  @@map("builds")
+}
+
+model BugReport {
+  id               String      @id @default(cuid())
+  bugCode          String      @unique
+  title            String
+  description      String      @db.Text
+  stepsToReproduce String?     @db.Text
+  expectedResult   String?     @db.Text
+  actualResult     String?     @db.Text
+  severity         BugSeverity @default(MEDIUM)
+  priority         BugPriority @default(MEDIUM)
+  status           BugStatus   @default(NEW)
+  projectId        String
+  buildId          String?
+  reporterId       String
+  assignedToId     String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  // Relations
+  project         Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  build           Builds?          @relation(fields: [buildId], references: [id], onDelete: SetNull)
+  reporter        User             @relation("BugReporter", fields: [reporterId], references: [id])
+  assignedTo      User?            @relation("BugAssignee", fields: [assignedToId], references: [id])
+  attachments     Attachment[]
+  comments        Comment[]
+  activityLogs    ActivityLog[]
+  environmentInfo EnvironmentInfo?
+  gameSession     GameSession?
+
+  @@index([projectId])
+  @@index([reporterId])
+  @@index([assignedToId])
+  @@index([status])
+  @@index([severity])
+  @@index([priority])
+  @@map("bug_reports")
+}
+
+model Attachment {
+  id         String   @id @default(cuid())
+  bugId      String
+  fileName   String
+  fileType   String
+  fileUrl    String
+  uploadedBy String
+  createdAt  DateTime @default(now())
+
+  // Relations
+  bug      BugReport @relation(fields: [bugId], references: [id], onDelete: Cascade)
+  uploader User      @relation("AttachmentUploader", fields: [uploadedBy], references: [id])
+
+  @@map("attachments")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  bugId     String
+  userId    String
+  message   String   @db.Text
+  parentId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  bug      BugReport @relation(fields: [bugId], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [userId], references: [id])
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies  Comment[] @relation("CommentReplies")
+
+  @@index([bugId])
+  @@map("comments")
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  bugId     String
+  userId    String
+  action    String
+  oldValue  String?  @db.Text
+  newValue  String?  @db.Text
+  createdAt DateTime @default(now())
+
+  // Relations
+  bug  BugReport @relation(fields: [bugId], references: [id], onDelete: Cascade)
+  user User      @relation(fields: [userId], references: [id])
+
+  @@index([bugId])
+  @@map("activity_logs")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("notifications")
+}
+
+model EnvironmentInfo {
+  id            String  @id @default(cuid())
+  bugId         String  @unique
+  os            String?
+  cpu           String?
+  gpu           String?
+  ram           String?
+  resolution    String?
+  driverVersion String?
+  gameLanguage  String?
+  fps           Int?
+
+  // Relations
+  bug BugReport @relation(fields: [bugId], references: [id], onDelete: Cascade)
+
+  @@map("environment_info")
+}
+
+model GameSession {
+  id        String  @id @default(cuid())
+  bugId     String  @unique
+  map       String?
+  mission   String?
+  character String?
+  weapon    String?
+  server    String?
+  roomId    String?
+
+  // Relations
+  bug BugReport @relation(fields: [bugId], references: [id], onDelete: Cascade)
+
+  @@map("game_sessions")
+}
